@@ -7,7 +7,7 @@ package graphes;
 
 @SuppressWarnings("rawtypes")
 // Noeud d'un graphe
-class Sommet implements Comparable {
+public class Sommet implements Comparable {
 
   final int id; // identifiant
   final int val; // valeur
