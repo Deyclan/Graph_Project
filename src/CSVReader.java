@@ -9,6 +9,7 @@ public class CSVReader {
     File file;
     BufferedReader bufferedReader;
     ArrayList<Commune> list;
+    int minPopulation=0;
 
     public CSVReader(File file) throws FileNotFoundException, UnsupportedEncodingException {
         this.file = file;
@@ -19,6 +20,18 @@ public class CSVReader {
         this.file = new File(url);
         this.bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(this.file),"ASCII"));
 
+    }
+
+    public CSVReader(File file, int minPopulation) throws FileNotFoundException, UnsupportedEncodingException {
+        this.file = file;
+        this.bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(this.file),"ASCII"));
+        this.minPopulation = minPopulation;
+    }
+
+    public CSVReader(String url, int minPopulation) throws FileNotFoundException, UnsupportedEncodingException {
+        this.file = new File(url);
+        this.bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(this.file),"ASCII"));
+        this.minPopulation = minPopulation;
     }
 
     public String readLine() throws IOException {
@@ -32,12 +45,14 @@ public class CSVReader {
        this.readLine();
        while ( (tmp = this.readLine()) != null){
            splited = tmp.split(";");
-
-           list.add(new Commune(splited[0],
+           Commune commune = new Commune(splited[0],
                    splited[1]
                    ,Integer.parseInt(splited[2]),
                    Float.parseFloat(formatFloatFRtoEN(splited[3]))
-                   ,Float.parseFloat(formatFloatFRtoEN(splited[4]))));
+                   ,Float.parseFloat(formatFloatFRtoEN(splited[4])));
+           if (filterMetropolitanFrance(commune) && filterPopulation(commune,minPopulation)){
+               list.add(commune);
+           }
        }
        return list;
     }
@@ -51,6 +66,21 @@ public class CSVReader {
             String output = tmp[0] + "." + tmp[1];
             return output;
         }
+    }
+
+    public boolean filterPopulation(Commune commune, int minPopulation){
+        if (commune.population >= minPopulation){
+            return true;
+        }
+        else return false;
+    }
+
+    public boolean filterMetropolitanFrance(Commune commune){
+        if ((commune.longitude > -4.9 && commune.longitude < 8.25) &&
+                (commune.latitude > 41.30 && commune.latitude < 51.1)){
+            return true;
+        }
+        else return false;
     }
 
 }
