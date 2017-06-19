@@ -55,25 +55,18 @@ public class main {
         CSVReader csvReader = new CSVReader("CommunesFrance.csv");
         ArrayList<Commune> arrayList;
         arrayList = csvReader.getCommuneList(1000);
-        Commune start = (Commune) arrayList.get(10);
-        Commune end = (Commune) arrayList.get(20);
-        
-        System.out.println(start.getNom()+"\n");
-        
-        System.out.println(start.getNom()+"\n");
-        
+        Commune start = (Commune) arrayList.get(8);
+        System.out.println("Commune départ"+start.getNom());
+        Commune end = (Commune) arrayList.get(2);
+        System.out.println("Commune arrivée"+end.getNom());
         ProachCommuneSearch p = new ProachCommuneSearch(arrayList,0.1);
         p.run();
 
-        
-
-        AStar aStar = new AStar(start,end);
+        AStar aStar = new AStar(p,start,end);
         ArrayList<Commune> arrayList2;
         arrayList2 = aStar.getShortestWay();
         
-        for (Commune c : arrayList2){
-            System.out.println("\nPlus court chemin trouvé:"+c.getNom());
-        }
+        
         
 
     }
