@@ -14,10 +14,12 @@ public class Arc {
 
     Commune depart; // origine de l'arc
     Commune arrivee; // destination de l'arc
+    double poids;
 
     public Arc(Commune depart, Commune arrivee){
         this.depart = depart;
         this.arrivee = arrivee;
+        this.poids = Math.sqrt(Math.pow((depart.getLatitude()-arrivee.getLatitude()),2) + Math.pow((depart.getLongitude()-arrivee.getLongitude()),2));
     }
 
     public Arc(){}

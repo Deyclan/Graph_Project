@@ -26,4 +26,11 @@ public class Commune {
         this.proachCommunesArcs= new ArrayList<>();
     }
 
+    public float getLongitude() {
+        return longitude;
+    }
+
+    public float getLatitude() {
+        return latitude;
+    }
 }
