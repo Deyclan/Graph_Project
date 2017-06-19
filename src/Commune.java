@@ -31,6 +31,8 @@ public class Commune implements Comparable<Commune>{
         this.proachCommunesArcs = new ArrayList<>();
     }
 
+    public Commune(){}
+
     // GETTERS
     public String getId() { return id; }
     public String getNom() { return nom; }

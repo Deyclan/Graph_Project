@@ -36,6 +36,7 @@ public class CommuneMap extends Application {
         p.run();
         drawPage(primaryStage, list);
 
+
         primaryStage.show();
     }
 
