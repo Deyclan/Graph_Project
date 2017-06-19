@@ -4,7 +4,7 @@ import java.util.ArrayList;
 /**
  * Classe represantant une Commune.
  */
-public class Commune {
+public class Commune implements Comparable<Commune>{
 
     private String id;
     private String nom;
@@ -18,6 +18,8 @@ public class Commune {
     private int f; // evaluation of the distance from start to goal, through this cell
     private int g; // evaluation of the distance from start to this cell
     private int h; // evaluation of the distance from this cell to the goal
+    Commune parent = null;
+    boolean visited = false;
 
     public Commune(String id, String nom, int population, float longitude, float latitude) {
         this.id = id;
@@ -40,6 +42,8 @@ public class Commune {
     public int getF() { return f; }
     public int getG() { return g; }
     public int getH() { return h; }
+    public Commune getParent() { return this.parent; }
+    public boolean isVisited() { return visited;}
 
     // SETTERS
     public void setProachCommunes(ArrayList<Commune> proachCommunes) {
@@ -51,5 +55,14 @@ public class Commune {
     public void setF(int f) { this.f = f; }
     public void setG(int g) { this.g = g; }
     public void setH(int h) { this.h = h; }
+    public void setParent(Commune parent) { this.parent = parent; }
+    void setVisited(boolean visited) { this.visited = visited; }
+
+    // METHOD
+    @Override
+    public int compareTo(Commune o) {
+        int r = (f - o.getF());
+	return r;
+    }
 
 }

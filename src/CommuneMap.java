@@ -25,15 +25,15 @@ public class CommuneMap extends Application {
     private Group root;
     public double toTranslate = 0;
     public ImageView background;
+    public ArrayList list;
 
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         CSVReader csvReader = new CSVReader("CommunesFrance.csv");
-        ArrayList list = csvReader.getCommuneList(1000);
+        list = csvReader.getCommuneList(1000);
         ProachCommuneSearch p = new ProachCommuneSearch(list,0.1);
         p.run();
-
         drawPage(primaryStage, list);
 
         primaryStage.show();
@@ -63,6 +63,8 @@ public class CommuneMap extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
     }
+    
+    
 
     public void drawArcs(Commune commune) {
         for (Commune c : commune.getProachCommunes()) {
@@ -83,7 +85,7 @@ public class CommuneMap extends Application {
     public void drawCommune(Commune commune){
         Rectangle rectangle = new Rectangle(widthParam,heightParam);
         rectangle.setFill(colorParam);
-        rectangle.setY(-(commune.latitude-41.30)*multiplicateur);
+        rectangle.setY(-(commune.getLatitude()-41.30)*multiplicateur);
         rectangle.setX((commune.getLongitude()+4.90)*multiplicateur);
         root.getChildren().add(rectangle);
         if ((commune.getLatitude()-41.30)*multiplicateur > toTranslate){

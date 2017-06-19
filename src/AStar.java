@@ -1,13 +1,11 @@
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Map;
 
 /**
- * Created by Brandon on 18/06/2017.
+ * Algorithme de A*, pour chercher le plus court chemin entre deux communes
  */
-public class AStar implements Runnable {
+public class AStar {
 
     private Commune startCommune;
     private Commune endCommune;
@@ -15,7 +13,6 @@ public class AStar implements Runnable {
     private ArrayList<Arc> cheminArc;
     private ArrayList<Commune> openList;
     private ArrayList<Commune> closedList;
-    private Commune currentCommune;
 
     public AStar(Commune startCommune, Commune endCommune) {
         this.startCommune = startCommune;
@@ -24,7 +21,6 @@ public class AStar implements Runnable {
         this.cheminArc = new ArrayList<>();
         this.openList = new ArrayList<>();
         this.closedList = new ArrayList<>();
-        this.currentCommune = startCommune;
     }
 
     public Arc compareArcs(ArrayList<Arc> arcArrayList, double endLatitude, double endLongitude) {
@@ -59,21 +55,19 @@ public class AStar implements Runnable {
     /**
      * a* algorithm to find the best path between two states
      *
-     * @param _start initial state
-     * @param _goal final state
+     * @return 
      */
-    ArrayList<Commune> algoASTAR() {
+   public ArrayList<Commune> getShortestWay() {
 
         // list of visited nodes
-        closedList = new ArrayList<Commune>();
+        closedList = new ArrayList<>();
         // list of nodes to evaluate
         openList = new ArrayList<>();
         openList.add(this.startCommune);
         // no cost to go from start to start
         this.startCommune.setG(0);
-        this.startCommune.setH(evalution(this.startCommune));
-        // TODO: h(start) <- evaluation(start)
-        // TODO: f(start) <- h(start)
+        this.startCommune.setH(evaluation(this.startCommune));
+        this.startCommune.setF(this.startCommune.getH());
         Commune current;
         // while there is still a node to evaluate        
         while (!openList.isEmpty()) {
@@ -81,19 +75,19 @@ public class AStar implements Runnable {
             current = chooseBestNode();
             // stop if the node is the goal
             if (current == this.endCommune) {
-                return rebuildPath(n);
+                return rebuildPath(current);
             }
             openList.remove(current);
             closedList.add(current);
             // construct the list of neighbourgs
-            ArrayList<Commune> nextDoorNeighbours = neighbours(n);
+            ArrayList<Commune> nextDoorNeighbours = current.getProachCommunes();
             for (Commune ndn : nextDoorNeighbours) {
                 // if the neighbour has been visited, do not reevaluate it
                 if (closedList.contains(ndn)) {
                     continue;
                 }
-                // cost to reach the neighbour is the cost to reach n + cost from n to the neighbourg
-                //TODO: int cost = ...
+                // cost to reach the neighbour is the cost to reach current + cost from current to the neighbourg
+                int cost = (int) (current.getG() + costBetween(current, ndn));
                 boolean bestCost = false;
                 // if the neighbour has not been evaluated
                 if (!openList.contains(ndn)) {
@@ -105,43 +99,73 @@ public class AStar implements Runnable {
                     bestCost = true;
                 }
                 if (bestCost) {
-                    ndn.setParent(n);
-                    //TODO : g(ndn) <- cost
-                    //TODO : f(ndn) <- g(ndn) + h(ndn)
+                    ndn.setParent(current);
+                    ndn.setG(cost);
+                    ndn.setF(ndn.getG()+ndn.getH());
                 }
             }
         }
         return null;
     }
 
-    @Override
-    public void run() {
-        while (currentCommune != endCommune) {
-            Commune tmp = nextCommune(currentCommune, endCommune);
-            currentCommune = tmp;
-        }
-
-        for (Commune c : chemin) {
-            System.out.print(c.getId() + "  =>  ");
-        }
+    private Commune chooseBestNode() {
+        Collections.sort(openList);
+        return openList.get(0);
     }
 
-    private Commune chooseBestNode() {
-    Collections.sort(openList);
-    return openList.get(0);    }
-
     // return the estimation of the distance from c to the goal*/
-	int evaluation(Commune c)
-	{		
-		int retour =  10* (int)distance(c, this.endCommune);
-		//retour = (int)((double) retour * c.getValue());
-		return retour;
-	}
-        /**return the  distance between the cells*/
-	double distance(Commune a, Commune b)
+    int evaluation(Commune c) {
+        int retour = 10 * (int) distance(c, this.endCommune);
+        return retour;
+    }
+
+    /**
+     * return the distance between the cells
+     */
+    double distance(Commune a, Commune b) {
+        double retour = Math.sqrt(Math.pow((a.getLatitude() - b.getLatitude()), 2) + Math.pow((a.getLongitude() - b.getLongitude()), 2));
+        return retour;
+    }
+
+    private ArrayList<Commune> rebuildPath(Commune current) {
+        if (current.getParent()!=null)
+		{
+			ArrayList<Commune> p = rebuildPath(current.getParent());
+			current.setVisited(true);
+			p.add(current);
+			return p;
+		}
+		else
+			return (new ArrayList<>());
+    }
+    /** return the cost from n to c : 10 for a lateral move, 14 (squareroot(2)*10) for a diagonal move 
+	 * @param n a node/cell
+	 * @param c a node/cel close to n
+	 * @return distance between the two adjacent nodes n and c
+	 * */
+	int costBetween(Commune n, Commune c)
 	{
-		double retour = 0.0;
-		retour = Math.sqrt(Math.pow((a.getLatitude()-b.getLatitude()),2) + Math.pow((a.getLongitude()-b.getLongitude()),2));
-		return retour;
+		int difx = (int) Math.abs(n.getLongitude()- c.getLongitude());
+		int dify = (int) Math.abs(n.getLatitude()- c.getLatitude());
+		assert difx<=1 && dify<=1 : "pb in costBetween, n and c are not adjacent !! ";
+		int retour = 10*(difx + dify);		
+		if (retour>=20) retour=14;
+		return retour;		
 	}
+
+	/** return the cost from n to c : 10 for a longitudinal move, 14 (squareroot(2)*10) for a diagonal move 
+	 * @param n a node/cell
+	 * @param c a node/cel close to n
+	 * @return distance between the two adjacent nodes n and c
+	 * */
+	int costBetweenWithoutNuisance(Commune n, Commune c)
+	{
+		int difx = (int) Math.abs(n.getLongitude()- c.getLongitude());
+		int dify = (int) Math.abs(n.getLatitude()- c.getLatitude());
+		assert difx<=1 && dify<=1 : "pb in costBetween, n and c are not adjacent !! ";
+		int retour = 10*(difx + dify);		
+		if (retour>=20) retour=14;
+		return retour;		
+	}
+
 }
