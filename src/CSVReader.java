@@ -23,6 +23,7 @@ public class CSVReader {
 
     }
 
+    /*
     public CSVReader(File file, int minPopulation) throws FileNotFoundException, UnsupportedEncodingException {
         this.file = file;
         this.bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(this.file),"ASCII"));
@@ -34,7 +35,7 @@ public class CSVReader {
         this.bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(this.file),"ASCII"));
         this.minPopulation = minPopulation;
     }
-
+    */
 
     public String readLine() throws IOException {
         return bufferedReader.readLine();
@@ -53,11 +54,31 @@ public class CSVReader {
                    Integer.parseInt(splited[2]),
                    Float.parseFloat(formatFloatFRtoEN(splited[3])),
                    Float.parseFloat(formatFloatFRtoEN(splited[4])));
-           if (filterMetropolitanFrance(commune) && filterPopulation(commune,minPopulation)){
+           if (filterMetropolitanFrance(commune)){
                list.add(commune);
            }
        }
        return list;
+    }
+
+    public ArrayList<Commune> getCommuneList(int minPopulation) throws IOException {
+        this.list = new ArrayList<>();
+        String tmp;
+        String[] splited ;
+        this.readLine();
+        while ( (tmp = this.readLine()) != null){
+            splited = tmp.split(";");
+
+            Commune commune = new Commune(splited[0],
+                    splited[1],
+                    Integer.parseInt(splited[2]),
+                    Float.parseFloat(formatFloatFRtoEN(splited[3])),
+                    Float.parseFloat(formatFloatFRtoEN(splited[4])));
+            if (filterMetropolitanFrance(commune) && filterPopulation(commune,minPopulation)){
+                list.add(commune);
+            }
+        }
+        return list;
     }
 
     public String formatFloatFRtoEN(String s){
@@ -79,7 +100,7 @@ public class CSVReader {
     }
 
     public boolean filterMetropolitanFrance(Commune commune){
-        if ((commune.longitude > -4.9 && commune.longitude < 8.25) &&
+        if ((commune.longitude > -4.9 && commune.longitude < 9.55) &&
                 (commune.latitude > 41.30 && commune.latitude < 51.1)){
             return true;
         }

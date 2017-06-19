@@ -7,24 +7,38 @@ import java.util.ArrayList;
 public class main {
 
     public static void main(String[] args) throws IOException {
-        File f = new File("CommunesFrance.csv");
-        String s;
-
-        CSVReader reader = new CSVReader(f);
         /*
-        while ((s=reader.readLine()) != null){
-            System.out.println(s);
+        File f = new File("CommunesFrance.csv");
+        CSVReader reader = new CSVReader(f);
+        ArrayList<Commune> arrayList;
+        arrayList = reader.getCommuneList(1000);
+
+        System.out.println(arrayList.size());
+
+        System.out.println("Enter to continue");
+        System.in.read();
+
+        ProachCommuneSearch p = new ProachCommuneSearch(arrayList);
+        p.run();
+
+        System.out.println("Enter to continue");
+        System.in.read();
+
+
+        for (Commune c:arrayList) {
+            if (c.proachCommunes == null) {
+                System.out.println(c.id + " | " + null);
+            } else if (c.proachCommunes.size() != 0){
+                System.out.println(c.id + " | " + c.proachCommunes.get(0).id);
+            }
         }
         */
 
-
-        ArrayList<Commune> arrayList = new ArrayList<>();
-        arrayList = reader.getCommuneList();
-
-        for (Commune c:arrayList) {
-            System.out.println(c.longitude);
+        /*
+        for (Commune c:arrayList){
+            System.out.println(c.id);
         }
-
+        */
 
         /*
         reader.readLine();
@@ -35,6 +49,20 @@ public class main {
         String[] a = tmp[3].split(",");
         System.out.println(a[0]+"."+a[1]);
         */
+
+
+        CSVReader csvReader = new CSVReader("CommunesFrance.csv");
+        ArrayList<Commune> arrayList;
+        arrayList = csvReader.getCommuneList(1000);
+        ProachCommuneSearch p = new ProachCommuneSearch(arrayList,0.1);
+        p.run();
+
+        Commune start = arrayList.get(10);
+        Commune end = arrayList.get(1000);
+
+        AStar aStar = new AStar(start,end);
+        aStar.run();
+
     }
 
 }
