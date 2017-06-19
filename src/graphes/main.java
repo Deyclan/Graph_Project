@@ -1,8 +1,12 @@
+package graphes;
+
+import .*;
+import graphes.algorithmes.AEtoile;
 import java.io.*;
 import java.util.ArrayList;
 
 /**
- * Main de l'application.
+ * Created by Brandon on 17/06/2017.
  */
 public class main {
 
@@ -60,7 +64,7 @@ public class main {
         Commune start = arrayList.get(10);
         Commune end = arrayList.get(1000);
 
-        AStar aStar = new AStar(start,end);
+        AEToile aStar = new AEtoile(start,end);
         aStar.run();
 
     }

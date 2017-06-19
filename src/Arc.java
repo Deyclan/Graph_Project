@@ -1,10 +1,10 @@
+import graphes.CommuneMap;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.stage.Stage;
 
 /**
- * Created by Brandon on 17/06/2017.
+ * Classe representant l'arc d'un graphe.
  */
 public class Arc {
 
@@ -21,10 +21,10 @@ public class Arc {
     public void drawArc(Group group, Color color){
         Line line = new Line();
         line.setStroke(color);
-        line.setStartX(CommuneMap.scaleLongitude(depart.longitude));
-        line.setStartY(CommuneMap.scaleLatitude(depart.latitude));
-        line.setEndX(CommuneMap.scaleLongitude(arrivee.longitude));
-        line.setEndY(CommuneMap.scaleLatitude(arrivee.latitude));
+        line.setStartX(CommuneMap.scaleLongitude(depart.getLongitude()));
+        line.setStartY(CommuneMap.scaleLatitude(depart.getLatitude()));
+        line.setEndX(CommuneMap.scaleLongitude(arrivee.getLongitude()));
+        line.setEndY(CommuneMap.scaleLatitude(arrivee.getLatitude()));
         group.getChildren().add(line);
     }
 

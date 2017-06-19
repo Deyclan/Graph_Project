@@ -1,8 +1,10 @@
+package graphes;
+
 import java.io.*;
 import java.util.ArrayList;
 
 /**
- * Classe nous permettant de lire les fichiers excel.
+ * Created by Brandon on 17/06/2017.
  */
 public class CSVReader {
 
@@ -93,15 +95,15 @@ public class CSVReader {
     }
 
     public boolean filterPopulation(Commune commune, int minPopulation){
-        if (commune.getPopulation() >= minPopulation){
+        if (commune.population >= minPopulation){
             return true;
         }
         else return false;
     }
 
     public boolean filterMetropolitanFrance(Commune commune){
-        if ((commune.getLongitude() > -4.9 && commune.getLongitude() < 9.55) &&
-                (commune.getLatitude() > 41.30 && commune.getLatitude() < 51.1)){
+        if ((commune.longitude > -4.9 && commune.longitude < 9.55) &&
+                (commune.latitude > 41.30 && commune.latitude < 51.1)){
             return true;
         }
         else return false;

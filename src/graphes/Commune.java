@@ -1,5 +1,7 @@
 package graphes;
 
+import java.util.ArrayList;
+
 /**
  * Classe represantant une Commune.
  */
@@ -10,6 +12,9 @@ public class Commune {
     int population;
     float longitude;
     float latitude;
+    public ArrayList<Commune> proachCommunes;
+    public ArrayList<Arc> proachCommunesArcs;
+
 
     public Commune(String id, String nom, int population, float longitude, float latitude){
         this.id = id;
@@ -17,6 +22,8 @@ public class Commune {
         this.population = population;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.proachCommunes = new ArrayList<>();
+        this.proachCommunesArcs= new ArrayList<>();
     }
 
 }

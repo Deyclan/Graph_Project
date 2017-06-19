@@ -25,10 +25,12 @@ loop
  */
 package graphes.algorithmes;
 
+import graphes.Commune;
 import graphes.Graphe;
 import java.util.ArrayList;
 import graphes.Sommet;
 import graphes.uinterface.UI;
+import java.util.Collections;
 
 /**
  *
@@ -36,28 +38,29 @@ import graphes.uinterface.UI;
  */
 public class AEtoile {
 
-    final Graphe g; // le graphe de travail
-    final int n; // nombre de sommets de g
-    final int source; // source du plus court chemin recherche
-    final int dest; // destination du plus court chemin recherche
+    private ArrayList<Commune> openList; // commune a explorer
+    private ArrayList<Commune> closedList; //commune explorées
+    
+    private Commune source; // source du plus court chemin recherche
+    private Commune dest; // destination du plus court chemin recherche
+    
     UI f; // fenetre pour la visualisation
-    private ArrayList<Integer> openList; 
-    private ArrayList<Integer> closedList; 
+    final Graphe g; // le graphe de travail
+ 
     private boolean done;
 
-    AEtoile(Graphe g, int depart, int arrivee) {
+    AEtoile(Graphe g, Commune depart, Commune arrivee) {
         this.g = g;
-        n = g.getN();
         this.source = depart;
         this.dest = arrivee;
     }
 
-    public ArrayList<Integer> findAStarPath() {
+    public ArrayList<Commune> findAStarPath() {
         openList = new ArrayList<>(); //the set of nodes to be evaluated
         closedList = new ArrayList<>(); //the set of nodes already evaluated
         openList.add(this.source); // add starting node to open list
         done = false;
-        int current;
+        Commune current;
         while (!done) {
             current = lowestFInOpen(); // get node with lowest fCosts from openList
             closedList.add(current); // add current node to closed list
@@ -89,5 +92,10 @@ public class AEtoile {
             }
         }
         return null; // unreachable
+    }
+
+    private Commune lowestFInOpen() {
+        Collections.sort(openList);
+        return openList.get(0);
     }
 }

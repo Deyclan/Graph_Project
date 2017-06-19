@@ -1,8 +1,4 @@
-
-
-/**
- * Classe dessinant les communes et les arcs.
- */
+package graphes;
 
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -20,7 +16,7 @@ public class CommuneMap extends Application {
 
     public int widthParam = 2;
     public int heightParam = 2;
-    private final Color colorParam = Color.BLACK;
+    private Color colorParam = Color.BLACK;
     public static int multiplicateur = 20*5;
     private Group root;
     public double toTranslate = 0;
@@ -51,7 +47,7 @@ public class CommuneMap extends Application {
         this.background.setFitWidth(1430);
         root.getChildren().add(background);
         for (Commune c:list) {
-            for (Arc arc:c.getProachCommunesArcs()){
+            for (Arc arc:c.proachCommunesArcs){
                 arc.drawArc(root,Color.RED);
             }
             //drawArcs(c);
@@ -65,13 +61,13 @@ public class CommuneMap extends Application {
     }
 
     public void drawArcs(Commune commune) {
-        for (Commune c : commune.getProachCommunes()) {
+        for (Commune c : commune.proachCommunes) {
             Line line = new Line();
             line.setStroke(Color.RED);
-            line.setStartX(scaleLongitude(commune.getLongitude()));
-            line.setStartY(scaleLatitude(commune.getLatitude()));
-            line.setEndX(scaleLongitude(c.getLongitude()));
-            line.setEndY(scaleLatitude(c.getLatitude()));
+            line.setStartX(scaleLongitude(commune.longitude));
+            line.setStartY(scaleLatitude(commune.latitude));
+            line.setEndX(scaleLongitude(c.longitude));
+            line.setEndY(scaleLatitude(c.latitude));
             root.getChildren().add(line);
         }
     }
@@ -84,10 +80,10 @@ public class CommuneMap extends Application {
         Rectangle rectangle = new Rectangle(widthParam,heightParam);
         rectangle.setFill(colorParam);
         rectangle.setY(-(commune.latitude-41.30)*multiplicateur);
-        rectangle.setX((commune.getLongitude()+4.90)*multiplicateur);
+        rectangle.setX((commune.longitude+4.90)*multiplicateur);
         root.getChildren().add(rectangle);
-        if ((commune.getLatitude()-41.30)*multiplicateur > toTranslate){
-            toTranslate = (commune.getLatitude()-41.30)*multiplicateur;
+        if ((commune.latitude-41.30)*multiplicateur > toTranslate){
+            toTranslate = (commune.latitude-41.30)*multiplicateur;
         }
     }
 

@@ -5,27 +5,39 @@
  */
 package graphes;
 
+import javafx.scene.Group;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+
 // arc d'un graphe
 public class Arc {
 
-    int origin; // origine de l'arc
-    int destination; // destination de l'arc
+    Commune depart; // origine de l'arc
+    Commune arrivee; // destination de l'arc
 
-    // constructeur
-    public Arc(int o, int d) {
-        this.origin = o;
-        this.destination = d;
+    public Arc(Commune depart, Commune arrivee){
+        this.depart = depart;
+        this.arrivee = arrivee;
     }
 
-    // redefinition de la fonction equals
-    public boolean equals(Object o) {
-        Arc a = (Arc) o;
-        return this.origin == a.origin && this.destination == a.destination;
+    public Arc(){}
+
+    public void drawArc(Group group, Color color){
+        Line line = new Line();
+        line.setStroke(color);
+        line.setStartX(CommuneMap.scaleLongitude(depart.longitude));
+        line.setStartY(CommuneMap.scaleLatitude(depart.latitude));
+        line.setEndX(CommuneMap.scaleLongitude(arrivee.longitude));
+        line.setEndY(CommuneMap.scaleLatitude(arrivee.latitude));
+        group.getChildren().add(line);
     }
 
-    // redefinition du hashCode
-    public int hashCode() {
-        return Graphe.c * this.origin + this.destination;
+    public Commune getArrivee() {
+        return arrivee;
+    }
+
+    public Commune getDepart() {
+        return depart;
     }
 
 }
